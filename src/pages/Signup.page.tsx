@@ -1,18 +1,19 @@
 import { useState } from "react";
-import { Link} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
-
-// import {useDispatch} from "react-redux"
+import {useDispatch} from "react-redux"
+import { handleSignupAPI } from "../redux/slices/auth.slice";
 
 
 export const Signup = () => {
 
-    // const dispatch = useDispatch()
-    // const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [signupData,setSignupData] = useState({
         username:"",
+        email:"",
         password:"",
         confirmPassword:""
     })
@@ -30,28 +31,29 @@ export const Signup = () => {
     
         e.preventDefault()
     
-        if(!signupData.username || !signupData.password || !signupData.confirmPassword ){
-           
+        if(!signupData.username || !signupData.password || !signupData.confirmPassword || !signupData.email ){
+            alert("Parameters are Missing !")
             return
         }
 
         if(signupData.password != signupData.confirmPassword){
-           
+            alert("Passwords do not match !")
             return
         }      
         
         // Calls handleSignupAPI to signup
-        const res="" //await dispatch(handleSignupAPI(signupData))
+        const res : any = await dispatch(handleSignupAPI(signupData))
+
         console.log(res)
 
 
-        // Redirect to login page if signup is successful
-        // if(res?.payload?.statusCode == 201){
-        //     navigate('/login')
-        // }
-        // else{
-        //     return
-        // }
+        //Redirect to login page if signup is successful
+        if(res?.payload?.statusCode == 201){
+            navigate('/login')
+        }
+        else{
+            return
+        }
 
     }
 
@@ -70,6 +72,12 @@ export const Signup = () => {
                     <h1 className=" font-semibold text-3xl my-2">Sign Up for Log</h1>
                     <p className="text-gray-500 text-sm my-2">Create your account to start blogging</p>
 
+                </div>
+                <div className="w-full flex justify-center items-start flex-col my-2">
+                    <label className="my-1 font-medium">
+                        Email
+                    </label>
+                    <input  autoComplete="new-email" type="email" placeholder="Enter your email" name="email"  value={signupData.email} onChange={handleChange} className="my-1 outline-none border rounded-md w-full py-2 px-2"  />
                 </div>
                 <div className="w-full flex justify-center items-start flex-col my-2">
                     <label className="my-1 font-medium">
