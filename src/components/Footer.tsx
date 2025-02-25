@@ -12,9 +12,9 @@ export function Footer() {
 
                 {/* Center Links */}
                 <div className="flex space-x-6">
-                <a href="#" >Privacy Policy</a>
-                <a href="#" >Terms of Service</a>
-                <a href="#" >Contact Us</a>
+                <a href="" >Privacy Policy</a>
+                <a href="" >Terms of Service</a>
+                <a href="" >Contact Us</a>
                 </div>
 
             
