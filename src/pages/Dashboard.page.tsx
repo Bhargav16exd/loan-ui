@@ -3,10 +3,15 @@ import { Footer } from "../components/Footer";
 import { Navbar } from "../components/Navbar";
 import { useState } from "react";
 import { handleGetDataAPI } from "../redux/slices/auth.slice";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import LoanGraph from "../components/Loangraph";
+
 
 export function Dashboard() {
 
     const dispatch = useDispatch()
+    const [schedule,setSchedule] = useState<any>(null)
+
 
     const [data,setData] = useState({
         disbursementDate: "",
@@ -32,10 +37,10 @@ export function Dashboard() {
 
     async function postData(){
 
-        console.log(data)   
 
         const res = await dispatch(handleGetDataAPI(data))
-        console.log(res)
+        setSchedule(res?.payload?.data)
+
     }
 
 
@@ -131,14 +136,62 @@ export function Dashboard() {
 
               </div>
 
-              <button onClick={postData} className="py-4 px-6 bg-black text-white rounded-lg  transition">
+              <button onClick={postData} className="py-4 px-6 bg-black text-white rounded-lg  transition mb-10">
                 Calculate EMI
               </button>
 
+              {
+              schedule ?
+
+              <>
+
+               {/* Graph */}
+               <div className="bg-white p-6 rounded-lg shadow-lg mb-6 border">
+                <h2 className="text-lg font-semibold mb-4">Loan Repayment Trend</h2>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={schedule}>
+                    <XAxis dataKey="dueDate" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="principalComponent" stroke="#4CAF50" name="Principal" />
+                    <Line type="monotone" dataKey="interestComponent" stroke="#F44336" name="Interest" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+
+             {/* Calendar View */}
+             <div className="bg-white p-6 rounded-lg shadow-lg mb-6 border">
+                <h2 className="text-lg font-semibold mb-4">EMI Calendar</h2>
+                <div className="grid grid-cols-3 gap-4">
+                  {schedule.map((item:any) => (
+                    <div key={item.installment} className="border p-4 rounded-lg text-center">
+                      <p className="font-semibold">{item.dueDate}</p>
+                      <p>EMI: ₹{item.emi}</p>
+                      <p className="text-green-600">Principal: ₹{item.principalComponent}</p>
+                      <p className="text-red-600">Interest: ₹{item.interestComponent}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <LoanGraph schedule={schedule} />
+
+             
+              
+              </>
+              :
+              <></>
+            }
+
+
             </div>
 
+           
 
-              
+
+          
+         
+                      
 
             <Footer/>
             
