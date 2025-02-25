@@ -35,17 +35,19 @@ export const handleSigninAPI:any = createAsyncThunk(
 
             return (await response).data
             
-        } catch (error) {
+        } catch (error:any) {
             console.log(error)
+            alert(error.response.data.message)
 
         }
     }
 )
 
 //Function calls Logout API
-export const handleLogoutAPI = createAsyncThunk(
+export const handleLogoutAPI :any = createAsyncThunk(
     'auth/logout',
     async function(){
+        console.log(localStorage.getItem('token'))
         try {
             const response = axios.get(`${backendAPI}/user/logout`,{
                 headers: {
@@ -55,8 +57,9 @@ export const handleLogoutAPI = createAsyncThunk(
 
             return (await response).data
             
-        } catch (error) {
+        } catch (error:any) {
             console.log(error)
+            alert(error.response.data.message)
 
         }
     }
@@ -74,7 +77,7 @@ export const handleGetDataAPI:any = createAsyncThunk(
             })
           return (await response).data
         }
-        catch (error) {
+        catch (error:any) {
             console.log(error)
         }
     }
