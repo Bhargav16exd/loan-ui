@@ -1,5 +1,4 @@
 import { Navbar } from "../components/Navbar";
-import Hero from "../assets/hero-image.jpg"
 import HeroImage3 from "../assets/hero-image-3.jpg"
 import BgGrid from "../assets/bg-grid.avif"
 import { Footer } from "../components/Footer";
